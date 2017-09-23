@@ -14,7 +14,7 @@ public class GameJamGame extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
-		this.setScreen(new MainMenu());
+		this.setScreen(new MainMenu(this));
 	}
 
 	@Override
