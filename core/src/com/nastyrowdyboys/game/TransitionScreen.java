@@ -70,16 +70,16 @@ public class TransitionScreen implements Screen
                     mGame.setScreen(new ToasterGame(mGame));
                     break;
                 case 1:
-                    mGame.setScreen(new ToasterGame(mGame));
+                    mGame.setScreen(new ChooseTheKnife(mGame));
                     break;
                 case 2:
-                    mGame.setScreen(new ToasterGame(mGame));
+                    mGame.setScreen(new CatchThePiano(mGame));
                     break;
                 case 3:
-                    mGame.setScreen(new ToasterGame(mGame));
+                    mGame.setScreen(new RememberTheConvict(mGame));
                     break;
                 case 4:
-                    mGame.setScreen(new ToasterGame(mGame));
+                    mGame.setScreen(new HitTheCar(mGame));
                     break;
             }
 
