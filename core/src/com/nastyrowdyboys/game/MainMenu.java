@@ -8,9 +8,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.rmi.activation.ActivationGroup_Stub;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -23,12 +32,12 @@ public class MainMenu implements Screen
     OrthographicCamera camera;
     Random random = new Random();
     Texture satanGoatImg;
+    Texture mMainMenuImg;
     SpriteBatch batch;
-    Texture satanGoatImgScaled;
-    TextButton startButton;
-    TextureAtlas mTextureAtlas;
-    Skin mSkin;
-    BitmapFont mFont;
+    ImageButton mStartBtn;
+    ImageButton mCreditBtn;
+    Stage mStage;
+    ArrayList<String> mGameNames;
 
     public MainMenu(GameJamGame g)
     {
@@ -38,20 +47,51 @@ public class MainMenu implements Screen
     @Override
     public void show() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
         satanGoatImg = new Texture("goatsatanbase.png");
+        mMainMenuImg = new Texture("menu.png");
         batch = new SpriteBatch();
-        mTextureAtlas = new TextureAtlas("PlsWork.pack");
-        mSkin = new Skin();
-        mSkin.addRegions(mTextureAtlas);
-        mFont = new BitmapFont();
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle(); //** Button properties **//
-        style.up = mSkin.getDrawable("Test");
-        style.down = mSkin.getDrawable("Test");
-        style.font = mFont;
-        startButton = new TextButton("Start!", style);
-        startButton.setPosition(Gdx.graphics.getBackBufferWidth() / 2 - 100, Gdx.graphics.getBackBufferHeight() * 1 / 8);
-        startButton.setSize(200, 100);
+
+        initButtons();
+        mStage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(mStage);
+        mStage.addActor(mStartBtn);
+        mStage.addActor(mCreditBtn);
+    }
+
+    private void initButtons()
+    {
+        Texture btnTexture = new Texture(Gdx.files.internal("garbage_start.png"));
+        TextureRegion btnTextureRegion = new TextureRegion(btnTexture);
+        TextureRegionDrawable btnTextureRegionDrawable = new TextureRegionDrawable(btnTextureRegion);
+        mStartBtn = new ImageButton(btnTextureRegionDrawable);
+        mStartBtn.setPosition(Gdx.graphics.getBackBufferWidth() / 2, Gdx.graphics.getBackBufferHeight() / 2 + 20);
+        mStartBtn.setSize(Gdx.graphics.getBackBufferWidth() / 2, Gdx.graphics.getBackBufferHeight() / 2);
+        mStartBtn.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new TransitionScreen(game));
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
+        mCreditBtn = new ImageButton(btnTextureRegionDrawable);
+        mCreditBtn.setPosition(Gdx.graphics.getBackBufferWidth() / 2, 0);
+        mCreditBtn.setSize(Gdx.graphics.getBackBufferWidth() / 2, Gdx.graphics.getBackBufferHeight() / 2 + 20);
+        mCreditBtn.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new CreditScreen(game));
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
     }
 
     public void update()
@@ -67,14 +107,9 @@ public class MainMenu implements Screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        satanGoatImg.getWidth();
-        int scaleX = satanGoatImg.getWidth() * 4;
-        int scaleY = satanGoatImg.getHeight() * 4;
-        int x = Gdx.graphics.getBackBufferWidth() / 2 - scaleX / 2;
-        int y = Gdx.graphics.getBackBufferHeight() / 2 - scaleY / 2;
-        startButton.draw(batch, 1.0f);
-        batch.draw(satanGoatImg, x, y, scaleX, scaleY);
+        batch.draw(mMainMenuImg,0,0,Gdx.graphics.getBackBufferWidth(), Gdx.graphics.getBackBufferHeight());
         batch.end();
+        mStage.act();
     }
 
     @Override

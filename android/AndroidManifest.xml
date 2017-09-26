@@ -7,12 +7,12 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/skullboi"
-        android:label="@string/app_name"
+        android:label="Nast Rowdy Bois"
         android:theme="@style/GdxTheme" >
         <activity
             android:name="com.nastyrowdyboys.game.AndroidLauncher"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait"
+            android:label="Bafomet's Buffet"
+            android:screenOrientation="landscape"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
